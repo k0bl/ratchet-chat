@@ -3,66 +3,136 @@
 </head>
 <body>
 
-<h2>Welcome to the chat application</h2>
-<div class="chat-top">
-	<label>Your Name:</label>
-	<input id="name"></input>
-</div>
-<div class="message-display">
-	<span id="sender-name"></span>
-	<span id="message-content"></span>
-</div>
+	<h2>Welcome to the chat application</h2>
+	<div class="chat-top">
+		<label>Your Name:</label>
+		<input id="name"></input>
+		<label>Your Color: </label><span id="your-color"></span>
+		<div class="swatch red"></div>
+		<div class="swatch blue"></div>
+		<div class="swatch green"></div>
+		<div class="swatch orange"></div>
+		<div class="swatch purple"></div>
+	</div>
+	<div class="message-display">
+		<span id="sender-name"></span>
+		<span id="message-content"></span>
+	</div>
 
-<div class="message-composition">
-	<label>Your Message: </label>
-	<input id="message"></input> <button id="send">Send</button>
-</div>
+	<div class="message-composition">
+		<label>Your Message: </label>
+		<input id="message"></input> <button id="send">Send</button>
+	</div>
 
 
 
-<script>
-   	$(document).ready(function(){
-   		var conn = new WebSocket('ws://localhost:8080');
-		conn.onopen = function(e) {
-		    console.log("Connection established!");
-		};
+	<script>
+	   	$(document).ready(function(){
+	   		var conn = new WebSocket('ws://localhost:8080');
+	   		$('#your-color').text('black');
+			conn.onopen = function(e) {
+			    console.log("Connection established!");
+			};
 
-		conn.onmessage = function(e) {
-		    console.log(e.data);
-			var test_str = e.data;
-			var sender_start_pos = test_str.indexOf('sender:') + 8;
-			var sender_end_pos = test_str.indexOf(',',sender_start_pos);
-			var sender_text = test_str.substring(sender_start_pos, sender_end_pos);
-			var msg_start_pos = test_str.indexOf('message:') + 8;
-			var msg_end_pos = test_str.indexOf('}',msg_start_pos);
-			var msg_text = test_str.substring(msg_start_pos, msg_end_pos);
-			var msg_content_text = sender_text+": "+msg_text;
-		    $("#message-content").append(msg_content_text+ "<br />"); 
-		};
-		
-		$("#send").click(function(){
-			var messageContent = $('#message').val();
-			var senderName = $('#name').val();
-			var message = "{sender: "+senderName+","+"message: "+messageContent+"}";
-			conn.send(message);
-			$("#message-content").append(senderName+ ": "+messageContent+"<br />"); 
-		});
+			conn.onmessage = function(e) {
+			    console.log(e.data);
+				var test_str = e.data;
+				var sender_start_pos = test_str.indexOf('sender:') + 8;
+				var sender_end_pos = test_str.indexOf(',',sender_start_pos);
+				var sender_text = test_str.substring(sender_start_pos, sender_end_pos);
+				
+				var clr_start_pos = test_str.indexOf('color: ') + 7;
+				var clr_end_pos = test_str.indexOf(',',clr_start_pos);
+				var clr_text = test_str.substring(clr_start_pos, clr_end_pos);
 
-    })
-</script>
-<style>
-#chat-top {
-	margin-top: 20px;
-	margin-bottom: 40px;
-}
-#message-display {
-	width: 600px;
-	min-height: 100px; 
-	border: 1px solid black;
-	margin-bottom: 20px;
-}
-#message-composition {
+				var msg_start_pos = test_str.indexOf('message:') + 8;
+				var msg_end_pos = test_str.indexOf('}',msg_start_pos);
+				var msg_text = test_str.substring(msg_start_pos, msg_end_pos);
+				var msg_content_text = sender_text+": "+msg_text;
+			    
+			    $("#message-content").append(msg_content_text+ "<br />").css('color', '\''+clr_text+'\'');
+			};
+			
+			$( ".swatch" ).click(function() {
+			 	var color = $( this ).css( "background-color" );
+			 	console.log(color);
+			 	if ($(this).hasClass('red')) {
+			 		$('#your-color').text('red');
+			 	} else if ($(this).hasClass('blue')) {
+					$('#your-color').text('blue');
+			 	} else if ($(this).hasClass('green')) {
+			 		$('#your-color').text('green');
+			 	} else if ($(this).hasClass('orange')) {
+			 		$('#your-color').text('orange');
+			 	} else if ($(this).hasClass('purple')) {
+					$('#your-color').text('red');
+			 	}
+			});
 
-}
-</style>
+			$("#send").click(function(){
+				var messageContent = $('#message').val();
+				var senderName = $('#name').val();
+				var yourColorCss = $('#your-color').text();
+				console.log('yourColorCss: ' + yourColorCss);
+				var senderColor = yourColorCss;
+
+				var message = "{sender: "+senderName+","+"color: "+senderColor+", "+"message: "+messageContent+"}";					
+				conn.send(message);
+				var newmsg = $("#message-content").append(senderName+ ": "+messageContent+"<br />");
+				newmsg.css("color", senderColor);
+			});
+
+	    })
+	</script>
+	<style>
+	#chat-top {
+		margin-top: 20px;
+		margin-bottom: 40px;
+	}
+	#message-display {
+		width: 600px;
+		min-height: 100px; 
+		border: 1px solid black;
+		margin-bottom: 20px;
+	}
+	#message-composition {
+
+	}
+	.swatch {
+		height: 25px;
+		width: 25px;
+	}
+	.red {
+		background-color: red;
+	}
+	.blue {
+		background-color: blue;
+	}
+	.green {
+		background-color: green;
+	}
+	.orange {
+		background-color: orange;
+	}
+	.purple {
+		background-color: purple;
+	}
+	
+	.text-red {
+		color: red;
+	}
+	.text-blue {
+		color: blue;
+	}
+	.text-green {
+		color: green;
+	}
+	.text-orange {
+		color: orange;
+	}
+	.text-purple {
+		color: purple;
+	}
+
+	</style>
 </body>
