@@ -41,7 +41,7 @@
 	<script type="text/javascript">
 	   	pageReady();
 	   	$(document).ready(function(){
-	   		var conn = new WebSocket('ws://localhost:8080');
+	   		var conn = new WebSocket('ws://10.0.3.123:8080');
 	   		$('#your-color').text('black');
 			conn.onopen = function(e) {
 			    console.log("Connection established!");
