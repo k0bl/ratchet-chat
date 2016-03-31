@@ -12,12 +12,14 @@ class Chat implements MessageComponentInterface {
 
     public function onOpen(ConnectionInterface $conn) {
         // Store the new connection to send messages to later
-        if ($this->clients->count() <=4 )
-        {
-            $this->clients->attach($conn);
-        } else {
-            echo "TOO MANY CONNECTIONS! ONLY 2 ALLOWED AT A TIME";
-        }
+        // if ($this->clients->count() <=4 )
+        // {
+        //     $this->clients->attach($conn);
+        // } else {
+        //     echo "TOO MANY CONNECTIONS! ONLY 2 ALLOWED AT A TIME";
+        // }
+        
+        $this->clients->attach($conn);
 
         echo "New connection! ({$conn->resourceId})\n";
     }
