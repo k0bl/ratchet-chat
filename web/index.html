@@ -49,7 +49,7 @@
 
 			conn.onmessage = function(e) {
 			    console.log(e.data);
-				if (e.data.indexOF())
+
 				var test_str = e.data;
 				var sender_start_pos = test_str.indexOf('sender:') + 8;
 				var sender_end_pos = test_str.indexOf(',',sender_start_pos);
@@ -64,12 +64,11 @@
 				var msg_text = test_str.substring(msg_start_pos, msg_end_pos);
 				var msg_content_text = sender_text+": "+msg_text;
 			    
-			    // if (msg_content_text.charAt(0) != "{")
-			    // {
-			    // 	$("#message-content").append(msg_content_text+ "<br />").css('color', '\''+clr_text+'\'');
-			    // }
+			    if (msg_content_text.charAt(0) != "{")
+			    {
+			    	$("#message-content").append(msg_content_text+ "<br />").css('color', '\''+clr_text+'\'');
+			    }
 			    
-			    $("#message-content").append(msg_content_text+ "<br />").css('color', '\''+clr_text+'\'');
 			    
 			};
 			
