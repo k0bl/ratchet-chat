@@ -3,7 +3,7 @@
 	<script src="js/webrtc.js"></script>
 </head>
 <body>
-
+<audio id="notify" src="sounds/alert.ogg"></audio>
 	<h2>Welcome to the PES7 RTC application</h2>
 	<div class="container">
 		<div class="chat-area">
@@ -41,7 +41,7 @@
 	<script type="text/javascript">
 	   	pageReady();
 	   	$(document).ready(function(){
-	   		var conn = serverConnection;
+	   		var conn = new WebSocket('ws://10.0.3.123:8080');
 	   		$('#your-color').text('black');
 			conn.onopen = function(e) {
 			    console.log("Connection established!");
@@ -66,7 +66,9 @@
 			    
 			    if (msg_content_text.charAt(0) != "{")
 			    {
+			    	
 			    	$("#message-content").append(msg_content_text+ "<br />").css('color', '\''+clr_text+'\'');
+			    	document.getElementById('notify').play();
 			    }
 			    
 			    
@@ -89,6 +91,18 @@
 			});
 
 			$("#send").click(function(){
+				sendMessage();
+			});
+
+			$('#message').keypress(function (e) {
+			 var key = e.which;
+			 if(key == 13)  // the enter key code
+			  {
+			    sendMessage();
+			  }
+			});
+			
+			function sendMessage() {
 				var messageContent = $('#message').val();
 				var senderName = $('#name').val();
 				var yourColorCss = $('#your-color').text();
@@ -99,7 +113,8 @@
 				conn.send(message);
 				var newmsg = $("#message-content").append(senderName+ ": "+messageContent+"<br />");
 				newmsg.css("color", senderColor);
-			});
+				$('#message').val('');
+			}
 
 	    })
 	</script>
