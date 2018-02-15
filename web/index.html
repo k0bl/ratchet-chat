@@ -4,7 +4,7 @@
 </head>
 <body>
 <audio id="notify" src="sounds/alert.ogg"></audio>
-	<h2>Welcome to the PES7 RTC application</h2>
+	<h2>Welcome to the RTC application</h2>
 	<div class="container">
 		<div class="chat-area">
 			<div class="chat-top">
@@ -54,7 +54,7 @@
 				var sender_start_pos = test_str.indexOf('sender:') + 8;
 				var sender_end_pos = test_str.indexOf(',',sender_start_pos);
 				var sender_text = test_str.substring(sender_start_pos, sender_end_pos);
-				
+
 				var clr_start_pos = test_str.indexOf('color: ') + 7;
 				var clr_end_pos = test_str.indexOf(',',clr_start_pos);
 				var clr_text = test_str.substring(clr_start_pos, clr_end_pos);
@@ -63,17 +63,17 @@
 				var msg_end_pos = test_str.indexOf('}',msg_start_pos);
 				var msg_text = test_str.substring(msg_start_pos, msg_end_pos);
 				var msg_content_text = sender_text+": "+msg_text;
-			    
+
 			    if (msg_content_text.charAt(0) != "{")
 			    {
-			    	
+
 			    	$("#message-content").append(msg_content_text+ "<br />").css('color', '\''+clr_text+'\'');
 			    	document.getElementById('notify').play();
 			    }
-			    
-			    
+
+
 			};
-			
+
 			$( ".swatch" ).click(function() {
 			 	var color = $( this ).css( "background-color" );
 			 	console.log(color);
@@ -101,7 +101,7 @@
 			    sendMessage();
 			  }
 			});
-			
+
 			function sendMessage() {
 				var messageContent = $('#message').val();
 				var senderName = $('#name').val();
@@ -109,7 +109,7 @@
 				console.log('yourColorCss: ' + yourColorCss);
 				var senderColor = yourColorCss;
 
-				var message = "{sender: "+senderName+","+"color: "+senderColor+", "+"message: "+messageContent+"}";					
+				var message = "{sender: "+senderName+","+"color: "+senderColor+", "+"message: "+messageContent+"}";
 				conn.send(message);
 				var newmsg = $("#message-content").append(senderName+ ": "+messageContent+"<br />");
 				newmsg.css("color", senderColor);
@@ -125,7 +125,7 @@
 	}
 	#message-display {
 		width: 600px;
-		min-height: 100px; 
+		min-height: 100px;
 		border: 1px solid black;
 		margin-bottom: 20px;
 	}
@@ -162,7 +162,7 @@
 	.purple {
 		background-color: purple;
 	}
-	
+
 	.text-red {
 		color: red;
 	}
